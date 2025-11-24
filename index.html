@@ -1423,7 +1423,36 @@
     animation: fadeInUp 1s ease 0.4s backwards;
     box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
 }
+        /* MOBILE FIX: remove top bar + remove the unwanted top gap */
+@media (max-width: 768px) {
 
+  /* Remove cinematic top bar */
+  .cinema-letterbox-top {
+    display: none !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    transform: translateY(-100%) !important;
+    pointer-events: none !important;
+  }
+
+  /* Remove empty space at the top */
+  body,
+  .hero,
+  #home.hero {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* Align hero content perfectly to top */
+  .hero .container {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  nav {
+    margin-bottom: 0 !important;
+  }
+}
 
     </style>
 </head>
@@ -2261,6 +2290,7 @@
 </script>
 </body>
 </html>
+
 
 
 
