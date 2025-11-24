@@ -1423,34 +1423,57 @@
     animation: fadeInUp 1s ease 0.4s backwards;
     box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
 }
-        /* MOBILE FIX: remove top bar + remove the unwanted top gap */
+/* ---------- MOBILE: fully remove cinematic layers + top gap ---------- */
 @media (max-width: 768px) {
-
-  /* Remove cinematic top bar */
-  .cinema-letterbox-top {
+  /* hide all cinematic overlays and letterbox bars on mobile */
+  .cinema-letterbox-top,
+  .cinema-letterbox-bottom,
+  .cinema-grain,
+  .cinema-vignette,
+  .cinema-grade,
+  .hero-cine-spot {
     display: none !important;
-    height: 0 !important;
     opacity: 0 !important;
-    transform: translateY(-100%) !important;
+    height: 0 !important;
     pointer-events: none !important;
+    transform: none !important;
   }
 
-  /* Remove empty space at the top */
+  /* ensure body and hero have no top margin / padding left by cinematic code */
   body,
+  html,
   .hero,
-  #home.hero {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-
-  /* Align hero content perfectly to top */
   .hero .container {
-    padding-top: 0 !important;
     margin-top: 0 !important;
+    padding-top: 0 !important;
   }
 
+  /* let hero start directly below the fixed nav - set a safe min-height */
+  /* If your nav height is different (example 80px), change the 64px below accordingly */
+  .hero {
+    min-height: calc(100vh - 64px) !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+  }
+
+  /* remove any extra transform pushed by the hero parallax on short viewports */
+  .hero[style] {
+    transform: none !important;
+  }
+
+  /* nav should stay fixed; make sure it does not add extra spacing */
   nav {
-    margin-bottom: 0 !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  /* keep hero-avatar centered and flush under nav */
+  .hero-photo-section,
+  .hero-content {
+    margin-top: 0 !important;
   }
 }
 
@@ -2114,7 +2137,14 @@
 
       // Add cinematic class to body so bars animate in
       // do a staged reveal for drama
-      setTimeout(()=> document.body.classList.add('cinema-active'), 250);
+     // only enable the cinematic bars automatically on wider screens (desktop/tablet)
+if (window.innerWidth > 768) {
+  setTimeout(()=> document.body.classList.add('cinema-active'), 250);
+} else {
+  // ensure body won't carry cinematic layout classes on mobile
+  document.body.classList.remove('cinema-active');
+}
+
 
       // Add dolly + hero focus on load and when hero is visible
       function setHeroCine(state){
